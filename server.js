@@ -2,49 +2,50 @@ import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 
-// Define the application environment
+// Environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || "production";
-
-// Define the port number the server will listen on
 const PORT = process.env.PORT || 3000;
 
+// ES module __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-/**
- * Configure Express middleware
- */
+// ---------------------
+// Middleware
+// ---------------------
 
-// Serve static files from the public directory
+// Serve static files from public/
 app.use(express.static(path.join(__dirname, "public")));
 
-// Set EJS as the templating engine
+// EJS setup
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "src", "views"));
 
-// Tell Express where to find your templates
-app.set("views", path.join(__dirname, "src/views"));
-
-/**
- * Routes
- */
+// ---------------------
+// Routes (async arrow functions)
+// ---------------------
 app.get("/", async (req, res) => {
-  const title = "Home";
-  res.render("home", { title });
+  res.render("home", { title: "Home" });
 });
 
 app.get("/organizations", async (req, res) => {
-  const title = "Our Partner Organizations";
-  res.render("organizations", { title });
+  res.render("organizations", { title: "Our Partner Organizations" });
 });
 
 app.get("/projects", async (req, res) => {
-  const title = "Service Projects";
-  res.render("projects", { title });
+  res.render("projects", { title: "Service Projects" });
 });
 
+app.get("/categories", async (req, res) => {
+  res.render("categories", { title: "Service Project Categories" });
+});
+
+// ---------------------
+// Start server
+// ---------------------
 app.listen(PORT, () => {
-  console.log(`Server is running at http://127.0.0.1:${PORT}`);
+  console.log(`Server running at http://127.0.0.1:${PORT}`);
   console.log(`Environment: ${NODE_ENV}`);
 });
